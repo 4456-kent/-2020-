@@ -154,8 +154,6 @@ class mpu6050:
             buf.append(self.i2c.readReg8(self.mpu6050,i))
         for i in range(0x3f,0x40):
             buf.append(self.i2c.readReg8(self.mpu6050,i))
-        for  i in range(0x41,0x42):
-            buf.append(self.i2c.readReg8(self.mpu6050,i))
         for  i in range(0x43,0x44):
             buf.append(self.i2c.readReg8(self.mpu6050,i))
         for  i in range(0x45,0x46):
@@ -166,17 +164,15 @@ class mpu6050:
         acc_x_mesure=((buf[0] << 8) | buf[1])
         acc_y_mesure=((buf[2] << 8) | buf[3])
         acc_z_mesure=((buf[4] << 8) | buf[5])
-        temp_mesure=((buf[6] <<8) | buf[7])
-        gyro_x_mesure=((buf[8] << 8) | buf[9])
-        gyro_y_mesure=((buf[10] << 8) | buf[11])
-        gyro_z_mesure=((buf[12] << 8) | buf[13])
+        gyro_x_mesure=((buf[6] <<8) | buf[7])
+        gyro_y_mesure=((buf[8] << 8) | buf[9])
+        gyro_z_mesure=((buf[10] << 8) | buf[11])
 
         acc_x=acc_x_mesure/ACCEL_SCALE_MODIFIER
         acc_y=acc_y_mesure/ACCEL_SCALE_MODIFIER
         acc_z=acc_z_mesure/ACCEL_SCALE_MODIFIER
-        temp=(temp_mesure/340.0)+36.53
         gyro_x=gyro_x_mesure/GYRO_SCALE_MODIFIER
         gyro_y=gyro_y_mesure/GYRO_SCALE_MODIFIER
         gyro_z=gyro_z_mesure/GYRO_SCALE_MODIFIER
 
-        return(acc_x,acc_y,acc_z,temp,gyro_x,gyro_y,gyro_z)
+        return(acc_x,acc_y,acc_z,gyro_x,gyro_y,gyro_z)
