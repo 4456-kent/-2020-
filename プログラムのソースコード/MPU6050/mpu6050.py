@@ -50,7 +50,7 @@ class mpu6050:
 
         temp_mesure=((buf[0] << 8) | buf[1])
 
-        temp=temmp_mesure/340+36.53
+        temp=temp_mesure/340+36.53
 
         return(temp)
         
