@@ -45,7 +45,7 @@ class mpu6050:
         buf=[]
         i=0
         while(i<2):
-            buf.append(self.i2c.readReg8(self.mpu6050,0x41+1))
+            buf.append(self.i2c.readReg8(self.mpu6050,0x41+i))
             i=i+1
 
         temp_mesure=((buf[0] << 8) | buf[1])
