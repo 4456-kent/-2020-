@@ -17,7 +17,7 @@ while True:
 
     print("ACC_X:",acc_x,"ACC_Y:",acc_y,"ACC_Z:",acc_z,"\n")
     print("TEMP:",temp,"\n")
-    print("GYRO_X:",gyro_x,"GYRO_Y:".gyro_y,"GYRO_Z:",gyro_z,"\n")
+    print("GYRO_X:",gyro_x,"GYRO_Y:",gyro_y,"GYRO_Z:",gyro_z,"\n")
     print("\n")
 
     time.sleep(1/SAMPLING_RATE)
