@@ -131,9 +131,7 @@
 import wiringpi as pi
 
 class mpu6050:
-    ACCEL_SCALE_MODIFIER=8192.0 #加速度のフルスケールを±4Gに設定したときの値
-    GYRO_SCALE_MODIFIER=65.5    #各速度のフルスケールを±500deg/sに設定したときの値
-
+ 
     def __init__(self,i2c,addr):
         self.addr=addr
         self.i2c=i2c
@@ -147,6 +145,7 @@ class mpu6050:
 
     def get_acc_value(self):
         buf=[]
+        ACCEL_SCALE_MODIFIER=8192.0 #加速度のフルスケールを±4Gに設定したときの値
         i=0
         while(i<6):
              buf.append(self.i2c.readReg8(self.mpu6050,0x3b+i))
@@ -164,6 +163,7 @@ class mpu6050:
         
     def get_gyro_value(self):
         buf=[]
+        GYRO_SCALE_MODIFIER=65.5    #各速度のフルスケールを±500deg/sに設定したときの値
         i=0
         while(i<6):
              buf.append(self.i2c.readReg8(self.mpu6050,0x43+i))
