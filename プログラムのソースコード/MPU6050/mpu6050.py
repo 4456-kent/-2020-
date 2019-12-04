@@ -147,8 +147,10 @@ class mpu6050:
 
     def get_acc_value(self):
         buf=[]
-        for i in range(0x3b,0x40):
-            buf.append(self.i2c.readReg8(self.mpu6050,i))
+        i=0
+        while(i<6):
+             buf.append(self.i2c.readReg8(self.mpu6050,0x3b+i))
+             i=i+1
         
         acc_x_mesure=((buf[0] << 8) | buf[1])
         acc_y_mesure=((buf[2] << 8) | buf[3])
@@ -161,8 +163,11 @@ class mpu6050:
         return(acc_x,acc_y,acc_z)
         
     def get_gyro_value(self):
-        for  i in range(0x43,0x48):
-            buf.append(self.i2c.readReg8(self.mpu6050,i))
+        buf=[]
+        i=0
+        while(i<6):
+             buf.append(self.i2c.readReg8(self.mpu6050,0x43+i))
+             i=i+1
         
         gyro_x_mesure=((buf[0] << 8) | buf[1])
         gyro_y_mesure=((buf[2] << 8) | buf[3])
