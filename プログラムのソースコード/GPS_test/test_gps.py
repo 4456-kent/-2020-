@@ -8,7 +8,7 @@ timeout=0   直ちに処理が返る
 timeout=x   x秒後にタイムアウト
 """
 
-for in range(10):
+for i in range(10):
     gps_data=gps.readline()
     print(gps_data)
 
