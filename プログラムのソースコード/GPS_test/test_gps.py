@@ -9,7 +9,7 @@ timeout=x   x秒後にタイムアウト
 """
 
 for i in range(10):
-    gps_data=gps.readline()
+    gps_data=serial.readline()
     print(gps_data)
 
 """
