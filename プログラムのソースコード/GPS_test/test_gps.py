@@ -1,6 +1,6 @@
 import serial
 
-s=gps.Serial('/dev/tty50',9600,timeout=1)   #ボーレート9600bps
+s=serial.Serial('/dev/tty50',9600,timeout=1)   #ボーレート9600bps
 """
 timeoutはシリアルポートをオープンするときのパラメータでreadメソッドのタイムアウト時間を指定することができる
 timeout=None    受信完了まで待つ
