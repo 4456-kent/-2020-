@@ -8,7 +8,7 @@ class gps:
         self.BAUD_RATE=BAUD_RATE
         self.TIMEOUT=TIMEOUT
         
-        self.gps=GPS.Serial('/dev/tty50',self.BAUD_RATE,timeout=self.TIMEOUT)
+        self.gps=serial.Serial('/dev/tty50',self.BAUD_RATE,timeout=self.TIMEOUT)
 
     def setup(self,DISTANCE_LAT,DISTANCE_LNG):
         self.DISTANCE_LAT=DISTANCE_LAT
@@ -17,7 +17,7 @@ class gps:
 
     def gps_read(self):
         for i in range(10):
-            gps_data[i]=GPS.readline()
+            gps_data[i]=self.gps.readline()
 
     def gpgga(self):
         (UTC,lat,N_S,lng,W_E,mode,satellite,h_accuracy,alt,m,geoid,m,none,id,checksum)=gps_data[0].split(',')
