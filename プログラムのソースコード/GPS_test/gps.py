@@ -11,6 +11,7 @@ class gps:
     def gpgga(self):    #NMEAフォーマットの$GPGGAを取得
         gps_data=[]
         gps_data_str=[]
+        array_gpgga=[]
         
         s=serial.Serial('/dev/ttyS0',self.BAUD_RATE,timeout=self.TIMEOUT)
 
@@ -20,15 +21,16 @@ class gps:
             gps_data_str.append(str(gps_data[i]))
         for i in range(10):
             if(gps_data_str[i][:8]=="b'$GPGGA"):
-                (NAME_1,UTC,lat,N_S,lng,W_E,mode,satellite,h_accuracy,alt,m,geoid,m,none,id,checksum)=gps_data_str[i].split(',')
+                array_gpgga=gps_data_str[i].split(',')
             else:
                 pass
         
-        return(NAME_1,UTC,lat,N_S,lng,W_E,mode,satellite,h_accuracy,alt,m,geoid,m,none,id,checksum)
+        return array_gpgga
 
     def gprmc(self):    #NMEAフォーマットの$GPRMCを取得
         gps_data=[]
         gps_data_str=[]
+        array_gprmc=[]
         
         s=serial.Serial('/dev/ttyS0',self.BAUD_RATE,timeout=self.TIMEOUT)
 
@@ -38,15 +40,16 @@ class gps:
             gps_data_str.append(str(gps_data[i]))
         for i in range(10):
             if(gps_data_str[i][:8]=="b'$GPRMC"):
-                (NAME_2,UTC,STATUS,lat,N_S,lng,W_E,velocity,direction,date,none1,none2,checksum)=gps_data_str[i].split(',')
+                array_gprmc=gps_data_str[i].split(',')
             else:
                 pass
         
-        return(NAME_2,UTC,STATUS,lat,N_S,lng,W_E,velocity,direction,date,none1,none2,checksum)
+        return array_gprmc
 
     def gpvtg(self):    #NMEAフォーマットの$GPVTGを取得
         gps_data=[]
         gps_data_str=[]
+        array_gpvtg=[]
         
         s=serial.Serial('/dev/ttyS0',self.BAUD_RATE,timeout=self.TIMEOUT)
 
@@ -56,11 +59,11 @@ class gps:
             gps_data_str.append(str(gps_data[i]))
         for i in range(10):
             if(gps_data_str[i][:8]=="b'$GPVTG"):
-                (NAME_3,direction,none1,none2,none3,velocity1,n,velocity2,k,checksum)=gps_data_str[i].split(',')
+                array_gpvtg=gps_data_str[i].split(',')
             else:
                 pass
         
-        return(NAME_3,direction,none1,none2,none3,velocity1,n,velocity2,k,checksum)
+        return array_gpvtg
 
     def distance_cal(self): #現在地と目的地までの距離を算出　ヒュベニの公式を利用している
         data=[]
@@ -88,33 +91,30 @@ class gps:
         D=math.sqrt((M*dP)*(M*dP)+(N*math.cos(P)*dR)*(N*math.cos(P)*dR))    #2点間の距離[m]
 
         return(D)
-    '''
-    def direction_cal(self):    #現在地から見た目的地の方角(真北を基準に)
+    
+    def direction_cal(self):    #現在地から見た目的地の相対角度方角(真北を基準に)
         data=[]
-
         data=self.gprmc()
-
+        
         lat_data=float(data[3])/100.0
         lng_data=float(data[5])/100.0
-
+        
         d_lat_data=int(lat_data)+(lat_data-int(lat_data))*100.0/60.0
         d_lng_data=int(lng_data)+(lng_data-int(lng_data))*100.0/60.0 #緯度・経度を度数表記に変換
-
-        y=(self.DISTANCE_LAT-d_lat_data)*111319.49
-        x=(self.DISTANCE_LNG-d_lng_data)*110946.2576
-
-        w=math.atan(x/y)
         
-        if(0<=w<=math.pi/2):
-            if(0<=float(data[8])<=180.0+w*180.0/math.pi):
-                dW=abs(w-float(data[8]))
-            elif(180.0+w*180.0/math.pi<float(data[8])<=360):
-                dW=abs((360+w*180.0/math.pi)-float(data[8]))
-        elif(math.pi/2<w)
-
-        return(dW)
-    '''
-
+        y=(self.DISTANCE_LAT-d_lat_data)*111319.49  #緯度1度分の距離を111319.49[m]で計算
+        x=(self.DISTANCE_LNG-d_lng_data)*110946.2576    #経度1度分の距離を110946.2576[m]で計算
         
+        Th0=math.atan(x/y)
+        
+        if(x>=0 and y>=0):  #現在地から目的地への方位Tht[rad]を4事象で場合分け
+            Tht=Th0
+        elif(x<=0 and y>=0):
+            Tht=2*math.pi+Th0
+        elif(y<=0):
+            Tht=math.pi+Th0
 
+        od=abs(float(data[8])-Tht*180/math.pi)
+
+        return(od)  #od[deg]で返す
 
