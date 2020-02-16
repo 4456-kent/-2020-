@@ -116,12 +116,20 @@ class bme280:
         press=self.calc_press(press_mesure)
 
         return(temp,humi,press)
-         
-    def alititude_cal(self):
+
+    def get_press_value(self):
         data=[]
         data=self.get_value()
 
-        h=(pow(1/5.257,self.s_press/float(data[2]))-1)*(float(data[0]+273.15))/0.0065   #h:地平面からの高度[m]
+        press_data=data[2]
+
+        return(press_data)
+         
+    def altitude_cal(self):
+        data=[]
+        data=self.get_value()
+
+        h=(pow(self.s_press/float(data[2]),1/5.257)-1)*(float(data[0]+273.15))/0.0065   #h:地平面からの高度[m]
 
         return(h)
 

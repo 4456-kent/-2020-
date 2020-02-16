@@ -8,6 +8,7 @@
 
 import wiringpi as pi
 import time
+import math
 
 class mpu6050:
  
@@ -104,4 +105,10 @@ class mpu6050:
 
         return(gyro_x,gyro_y,gyro_z)
 
-   
+    def synthetic_acc_cal(self):        #合成加速度を計算
+        acc_data=[]
+        acc_data=self.get_acc_value()
+
+        synthetic_acc=math.sqrt(pow(float(acc_data[0]),2)+pow(float(acc_data[1]),2)+pow(float(acc_data[2]),2))
+
+        return(synthetic_acc)
