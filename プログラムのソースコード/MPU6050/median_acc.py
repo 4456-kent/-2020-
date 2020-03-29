@@ -10,35 +10,18 @@ i2c=pi.I2C()
 acc=mpu6050.mpu6050(i2c,mpu6050_addr)
 acc.setup()
 
-sequence='STAY'
+to=time.time()
+array=[]
+for i in range(0,3):
+    array.append(acc.synthetic_acc_cal())
+if(statistics.median(array)>2):
+    pass
+else:
+    pass
+t1=time.time()-to
+print(statistics.median(array))
+print("\n")
+print(t1)
 
-while True:
-    if(sequence=='STAY'):
-        data=[]
-        acc_cnt=0
-        while(acc_cnt<5):
-            for i in range(0,5):
-                data.append(acc.synthetic_acc_cal())
-            if(statistics.median(data)>2):
-                acc_cnt=acc_cnt+1
-            else:
-                pass
-        if(acc_cnt==5):
-            print("OK")
-            sequence='LANDING'
 
-    if(sequence=='LANDING'):
-        data=[]
-        acc_cnt=0
-        while(acc_cnt<5):
-            for i in range(0,5):
-                data.append(acc.synthetic_acc_cal())
-            if(statistics.median(data)>2):
-                acc_cnt=acc_cnt+1
-            else:
-                pass
-        if(acc_cnt==5):
-            print("Finish")
-            break
-    
-    time.sleep(1/100)
+

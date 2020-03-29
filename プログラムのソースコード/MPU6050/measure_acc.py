@@ -2,9 +2,9 @@ import wiringpi as pi
 import time
 import csv
 import mpu6050
+import statistics
 
 mpu6050_addr=0x68
-SAMPLING_RATE=50
 
 f=open("mesure_acceleration.csv","w")
 header=["TIME","ACCELERATION"]
@@ -21,13 +21,14 @@ time.sleep(30)
 t0=time.time()
 while True:
     t=time.time()-t0
-    data=acc.synthetic_acc_cal()
+    data=[]
+    for i in range(0,3):
+        data.append(acc.synthetic_acc_cal())
+    median_acc=statistics.median(data)
 
-    line=[t,data]
+    line=[t,median_acc]
 
     writer.writerow(line)
-
-    time.sleep(1/SAMPLING_RATE)
 
     if(t>30):
         writer.writerow(['END'])

@@ -1,7 +1,7 @@
 import bme280
 import wiringpi as pi
 import statistics
-import time 
+import time
 
 bme280_addr=0x76
 
@@ -19,11 +19,13 @@ s_press=statistics.median(s_press_sample)
 weather=bme280.bme280(i2c,bme280_addr,s_press)
 weather.setup()
 
-while True:
-    alt=[]
-    for i in range(0,3):
-        alt.append(weather.altitude_cal())
-    alt_median=statistics.median(alt)
-    print(alt_median)
-    print("[m]\n")
-    time.sleep(1)
+array=[]
+for i in range(0,100):
+    array.append(weather.altitude_cal())
+print(statistics.median(array))
+print('\n')
+print(max(array))
+print('\n')
+print(min(array))
+print('\n')
+

@@ -65,21 +65,30 @@ class gps:
         
         return array_gpvtg
 
-    def distance_cal(self): #現在地と目的地までの距離を算出　ヒュベニの公式を利用している
+    def latitude(self):     #緯度(度表示)
         data=[]
 
         data=self.gprmc()
-
         lat_data=float(data[3])/100.0
-        lng_data=float(data[5])/100.0
-
         d_lat_data=int(lat_data)+(lat_data-int(lat_data))*100.0/60.0
-        d_lng_data=int(lng_data)+(lng_data-int(lng_data))*100.0/60.0 #緯度・経度を度数表記に変換
 
+        return d_lat_data
+
+    def longitude(self):    #経度(度表示)
+        data=[]
+
+        data=self.gprmc()
+        lng_data=float(data[5])/100.0
+        d_lng_data=int(lng_data)+(lng_data-int(lng_data))*100.0/60.0 
+
+        return d_lng_data
+
+
+    def distance_cal(self): #現在地と目的地までの距離を算出　ヒュベニの公式を利用している
         r_DISTANCE_LAT=self.DISTANCE_LAT*math.pi/180.0
         r_DISTANCE_LNG=self.DISTANCE_LNG*math.pi/180.0
-        r_lat_data=d_lat_data*(math.pi)/180.0
-        r_lng_data=d_lng_data*(math.pi)/180.0 #目的地の緯度経度＆現在の緯度経度をラジアンに変換
+        r_lat_data=self.latitude()*(math.pi)/180.0
+        r_lng_data=self.longitude()*(math.pi)/180.0 #目的地の緯度経度＆現在の緯度経度をラジアンに変換
 
         dP=abs(r_DISTANCE_LAT-r_lat_data)   #2点間の緯度差
         dR=abs(r_DISTANCE_LNG-r_lng_data)   #2点間の経度差

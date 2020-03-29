@@ -5,7 +5,6 @@ import mpu6050
 import statistics
 
 mpu6050_addr=0x68
-SAMPLING_RATE=100
 
 DROP_ACC=0.2  #落下判定の閾値[G]
 LANDING_ACC=2.5 #着地判定の閾値[G]
@@ -40,7 +39,7 @@ while (SEQUENCE=='STAY'):       #落下判定シーケンス
     drop_synthetic_acc=[]
     log()
     if(acc_cnt1<5):
-        for i in range(0,5):
+        for i in range(0,3):
             drop_synthetic_acc.append(acc.synthetic_acc_cal())
         if(statistics.median(drop_synthetic_acc)<=DROP_ACC):
             acc_cnt1=acc_cnt1+1
@@ -50,13 +49,12 @@ while (SEQUENCE=='STAY'):       #落下判定シーケンス
         t1=time.time()-t0
         SEQUENCE='DROP'
         break
-    time.sleep(1/SAMPLING_RATE)
 
 while (SEQUENCE=='DROP'):       #着地判定シーケンス
     landing_synthetic_acc=[]
     log()
     if(acc_cnt2<5):
-        for i in range(0,5):
+        for i in range(0,3):
             landing_synthetic_acc.append(acc.synthetic_acc_cal())
         if(statistics.median(landing_synthetic_acc)>LANDING_ACC):
             acc_cnt2=acc_cnt2+1
@@ -66,7 +64,6 @@ while (SEQUENCE=='DROP'):       #着地判定シーケンス
         t2=time.time()-t0
         SEQUENCE='LANDING'
         break
-    time.sleep(1/SAMPLING_RATE)
 
 if(SEQUENCE=='LANDING'):
      writer.writerow(['END'])
